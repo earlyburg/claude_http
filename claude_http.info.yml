@@ -1,5 +1,5 @@
-name: Custom HTTP API
+name: Claude HTTP
 type: module
-description: 'Custom HTTP method implementation for Drupal 10'
+description: 'Custom HTTP method implementation for Drupal 10 created by Claude Code'
 core_version_requirement: ^10
 package: Custom

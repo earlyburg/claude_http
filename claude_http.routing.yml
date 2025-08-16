@@ -1,36 +1,36 @@
-custom_http_api.get_data:
+claude_http.get_data:
   path: '/api/data/{id}'
   defaults:
-    _controller: '\Drupal\custom_http_api\Controller\ApiController::getData'
+    _controller: '\Drupal\claude_http\Controller\ApiController::getData'
     _title: 'Get Data'
   requirements:
     _permission: 'access content'
     id: \d+
   methods: [GET]
 
-custom_http_api.post_data:
+claude_http.post_data:
   path: '/api/data'
   defaults:
-    _controller: '\Drupal\custom_http_api\Controller\ApiController::postData'
+    _controller: '\Drupal\claude_http\Controller\ApiController::postData'
     _title: 'Post Data'
   requirements:
     _permission: 'create content'
   methods: [POST]
 
-custom_http_api.put_data:
+claude_http.put_data:
   path: '/api/data/{id}'
   defaults:
-    _controller: '\Drupal\custom_http_api\Controller\ApiController::putData'
+    _controller: '\Drupal\claude_http\Controller\ApiController::putData'
     _title: 'Update Data'
   requirements:
     _permission: 'edit any content'
     id: \d+
   methods: [PUT]
 
-custom_http_api.delete_data:
+claude_http.delete_data:
   path: '/api/data/{id}'
   defaults:
-    _controller: '\Drupal\custom_http_api\Controller\ApiController::deleteData'
+    _controller: '\Drupal\claude_http\Controller\ApiController::deleteData'
     _title: 'Delete Data'
   requirements:
     _permission: 'delete any content'

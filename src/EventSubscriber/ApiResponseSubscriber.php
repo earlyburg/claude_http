@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\custom_http_api\EventSubscriber;
+namespace Drupal\claude_http\EventSubscriber;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;

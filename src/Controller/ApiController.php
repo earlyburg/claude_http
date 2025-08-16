@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\custom_http_api\Controller;
+namespace Drupal\claude_http\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Database\Connection;
@@ -64,7 +64,7 @@ class ApiController extends ControllerBase {
   public function getData($id) {
     try {
       // Example: Fetch from a custom table or entity
-      $query = $this->database->select('custom_api_data', 'c')
+      $query = $this->database->select('claude_http', 'c')
         ->fields('c')
         ->condition('id', $id)
         ->execute();
@@ -84,7 +84,7 @@ class ApiController extends ControllerBase {
         ], Response::HTTP_NOT_FOUND);
       }
     } catch (\Exception $e) {
-      $this->loggerFactory->get('custom_http_api')->error('GET request failed: @message', ['@message' => $e->getMessage()]);
+      $this->loggerFactory->get('claude_http')->error('GET request failed: @message', ['@message' => $e->getMessage()]);
 
       return new JsonResponse([
         'status' => 'error',
@@ -120,7 +120,7 @@ class ApiController extends ControllerBase {
         'updated' => time(),
       ];
 
-      $id = $this->database->insert('custom_api_data')
+      $id = $this->database->insert('claude_http')
         ->fields($fields)
         ->execute();
 
@@ -131,7 +131,7 @@ class ApiController extends ControllerBase {
       ], Response::HTTP_CREATED);
 
     } catch (\Exception $e) {
-      $this->loggerFactory->get('custom_http_api')->error('POST request failed: @message', ['@message' => $e->getMessage()]);
+      $this->loggerFactory->get('claude_http')->error('POST request failed: @message', ['@message' => $e->getMessage()]);
 
       return new JsonResponse([
         'status' => 'error',
@@ -156,7 +156,7 @@ class ApiController extends ControllerBase {
       $content = json_decode($request->getContent(), TRUE);
 
       // Check if record exists
-      $exists = $this->database->select('custom_api_data', 'c')
+      $exists = $this->database->select('claude_http', 'c')
         ->fields('c', ['id'])
         ->condition('id', $id)
         ->countQuery()
@@ -182,7 +182,7 @@ class ApiController extends ControllerBase {
         $fields['description'] = $content['description'];
       }
 
-      $this->database->update('custom_api_data')
+      $this->database->update('claude_http')
         ->fields($fields)
         ->condition('id', $id)
         ->execute();
@@ -193,7 +193,7 @@ class ApiController extends ControllerBase {
       ], Response::HTTP_OK);
 
     } catch (\Exception $e) {
-      $this->loggerFactory->get('custom_http_api')->error('PUT request failed: @message', ['@message' => $e->getMessage()]);
+      $this->loggerFactory->get('claude_http')->error('PUT request failed: @message', ['@message' => $e->getMessage()]);
 
       return new JsonResponse([
         'status' => 'error',
@@ -214,7 +214,7 @@ class ApiController extends ControllerBase {
   public function deleteData($id) {
     try {
       // Check if record exists
-      $exists = $this->database->select('custom_api_data', 'c')
+      $exists = $this->database->select('claude_http', 'c')
         ->fields('c', ['id'])
         ->condition('id', $id)
         ->countQuery()
@@ -228,7 +228,7 @@ class ApiController extends ControllerBase {
         ], Response::HTTP_NOT_FOUND);
       }
 
-      $this->database->delete('custom_api_data')
+      $this->database->delete('claude_http')
         ->condition('id', $id)
         ->execute();
 
@@ -238,7 +238,7 @@ class ApiController extends ControllerBase {
       ], Response::HTTP_OK);
 
     } catch (\Exception $e) {
-      $this->loggerFactory->get('custom_http_api')->error('DELETE request failed: @message', ['@message' => $e->getMessage()]);
+      $this->loggerFactory->get('claude_http')->error('DELETE request failed: @message', ['@message' => $e->getMessage()]);
 
       return new JsonResponse([
         'status' => 'error',

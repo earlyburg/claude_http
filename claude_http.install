@@ -2,15 +2,15 @@
 
 /**
  * @file
- * Install, update and uninstall functions for the custom_http_api module.
+ * Install, update and uninstall functions for the claude_http module.
  */
 
 /**
  * Implements hook_install().
  */
-function custom_http_api_install() {
+function claude_http_install() {
   // Create the custom table during module installation.
-  $schema = custom_http_api_schema();
+  $schema = claude_http_schema();
   foreach ($schema as $table_name => $table_spec) {
     if (!\Drupal::database()->schema()->tableExists($table_name)) {
       \Drupal::database()->schema()->createTable($table_name, $table_spec);
@@ -21,9 +21,9 @@ function custom_http_api_install() {
 /**
  * Implements hook_uninstall().
  */
-function custom_http_api_uninstall() {
+function claude_http_uninstall() {
   // Drop the custom table during module uninstallation.
-  $schema = custom_http_api_schema();
+  $schema = claude_http_schema();
   foreach ($schema as $table_name => $table_spec) {
     if (\Drupal::database()->schema()->tableExists($table_name)) {
       \Drupal::database()->schema()->dropTable($table_name);
@@ -34,9 +34,9 @@ function custom_http_api_uninstall() {
 /**
  * Implements hook_schema().
  */
-function custom_http_api_schema() {
-  $schema['custom_api_data'] = [
-    'description' => 'Stores data for the custom HTTP API.',
+function claude_http_schema() {
+  $schema['claude_http'] = [
+    'description' => 'Stores data for the claude_http module.',
     'fields' => [
       'id' => [
         'type' => 'serial',

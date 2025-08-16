@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\custom_http_api\Service;
+namespace Drupal\claude_http\Service;
 
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;

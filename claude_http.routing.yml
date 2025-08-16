@@ -1,0 +1,38 @@
+custom_http_api.get_data:
+  path: '/api/data/{id}'
+  defaults:
+    _controller: '\Drupal\custom_http_api\Controller\ApiController::getData'
+    _title: 'Get Data'
+  requirements:
+    _permission: 'access content'
+    id: \d+
+  methods: [GET]
+
+custom_http_api.post_data:
+  path: '/api/data'
+  defaults:
+    _controller: '\Drupal\custom_http_api\Controller\ApiController::postData'
+    _title: 'Post Data'
+  requirements:
+    _permission: 'create content'
+  methods: [POST]
+
+custom_http_api.put_data:
+  path: '/api/data/{id}'
+  defaults:
+    _controller: '\Drupal\custom_http_api\Controller\ApiController::putData'
+    _title: 'Update Data'
+  requirements:
+    _permission: 'edit any content'
+    id: \d+
+  methods: [PUT]
+
+custom_http_api.delete_data:
+  path: '/api/data/{id}'
+  defaults:
+    _controller: '\Drupal\custom_http_api\Controller\ApiController::deleteData'
+    _title: 'Delete Data'
+  requirements:
+    _permission: 'delete any content'
+    id: \d+
+  methods: [DELETE]

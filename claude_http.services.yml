@@ -1,0 +1,4 @@
+services:
+  claude_http.api_service:
+    class: Drupal\claude_http\Service\ApiService
+    arguments: ['@database', '@logger.factory']

@@ -5,6 +5,7 @@ namespace Drupal\claude_http\Controller;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
+use Drupal\claude_http\Service\ConnectorService;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -30,16 +31,29 @@ class ApiController extends ControllerBase {
   protected $loggerFactory;
 
   /**
+   * The HTTP connector service.
+   *
+   * @var \Drupal\claude_http\Service\ConnectorService
+   */
+  protected $httpService;
+
+  /**
    * Constructs an ApiController object.
    *
    * @param \Drupal\Core\Database\Connection $database
    *   The database connection.
    * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
    *   The logger factory.
+   * @param \Drupal\claude_http\Service\ConnectorService $http_service
+   *   The HTTP connector service.
    */
-  public function __construct(Connection $database, LoggerChannelFactoryInterface $logger_factory) {
+  public function __construct(
+    Connection $database,
+    LoggerChannelFactoryInterface $logger_factory,
+    ConnectorService $http_service) {
     $this->database = $database;
     $this->loggerFactory = $logger_factory;
+    $this->httpService = $http_service;
   }
 
   /**
@@ -48,7 +62,8 @@ class ApiController extends ControllerBase {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('database'),
-      $container->get('logger.factory')
+      $container->get('logger.factory'),
+      $container->get('claude_http.http_service')
     );
   }
 

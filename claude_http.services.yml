@@ -1,4 +1,14 @@
 services:
   claude_http.api_service:
     class: Drupal\claude_http\Service\ApiService
-    arguments: ['@database', '@logger.factory']
+    arguments: [
+      '@database',
+      '@logger.factory'
+    ]
+  claude_http.http_service:
+    class: Drupal\claude_http\Service\ConnectorService
+    arguments: [
+      '@http_client',
+      '@config.factory',
+      '@logger.factory'
+    ]

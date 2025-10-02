@@ -2,9 +2,8 @@
 
 namespace Drupal\claude_http\Service;
 
-use Drupal\Component\Serialization\Json;
-use Drupal\Core\Config\ConfigFactoryInterface;
 use GuzzleHttp\ClientInterface;
+use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Exception\RequestException;
 use Psr\Container\ContainerExceptionInterface;
@@ -20,44 +19,33 @@ use Psr\Container\NotFoundExceptionInterface;
 class ConnectorService
 {
 
-    /**
-     * The Drupal http client interface.
-     *
-     * @var ClientInterface
-     */
-    private ClientInterface $httpClient;
-
   /**
-   * The config factory interface.
+   * The Drupal http client interface.
    *
-   * @var ConfigFactoryInterface $config
+   * @var ClientInterface
    */
-  private ConfigFactoryInterface $config;
+  private ClientInterface $httpClient;
 
   /**
     * Drupal logger channel factory service.
     *
     * @var LoggerChannelFactory $loggerFactory
     */
- protected LoggerChannelFactory $loggerFactory;
+  protected LoggerChannelFactory $loggerFactory;
 
     /**
      * @param ClientInterface $http_client
-     * @param ConfigFactoryInterface $config_interface
      * @param LoggerChannelFactory $logger_factory
      */
-
     public function __construct(
     ClientInterface $http_client,
-    ConfigFactoryInterface $config_interface,
     LoggerChannelFactory $logger_factory) {
     $this->httpClient = $http_client;
-    $this->config = $config_interface;
     $this->loggerFactory = $logger_factory;
   }
 
   /**
-   * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
+   * @param ContainerInterface $container
    *   The Drupal service container.
    *
    * @return static
@@ -67,7 +55,6 @@ class ConnectorService
   public static function create(ContainerInterface $container) {
     return new static(
     $container->get('http_client'),
-    $container->get('config.factory'),
     $container->get('logger.factory'),
     );
   }
@@ -76,44 +63,41 @@ class ConnectorService
    * @param $url
    * @param $headers
    * @param $body
-   * @return false|mixed
-   * @throws \GuzzleHttp\Exception\GuzzleException
+   * @return false|string
+   * @throws GuzzleException
    */
   protected function httpPost($url, $headers, $body = NULL) {
-    $return = FALSE;
     $data = FALSE;
     $options['headers'] = $headers;
     $options['body'] = $body;
     try {
       $response = $this->httpClient->post($url, $options);
       $status = $response->getStatusCode();
-      if($status == '200') {
-        $data = $response->getBody()->getContents();
+      if($status == 200) {
+        $data = $response->getBody()
+          ->getContents();
       }
       else {
         $this->loggerFactory->get('claude_http')
           ->warning('httpPost() returned a status '.$status. ' with the response '.$response->getBody()
               ->getContents());
       }
-    } catch (RequestException $e) {
+    }
+    catch (RequestException | ConnectException $e) {
       $this->loggerFactory->get('claude_http')
         ->error($e);
     }
-    if ($data) {
-      $return = Json::decode($data);
-    }
-    return $return;
+    return $data;
   }
 
   /**
    * @param $url
    * @param $params
    * @param $headers
-   * @return false|mixed
+   * @return false|string
    * @throws GuzzleException
    */
   protected function httpGet($url, $params, $headers) {
-    $return = FALSE;
     $data = FALSE;
     try {
       $response = $this->httpClient->get($url, [
@@ -121,21 +105,21 @@ class ConnectorService
         'query' => $params,
       ]);
       $status = $response->getStatusCode();
-      if($status == '200') {
-        $data = $response->getBody()->getContents();
-      } else {
+      if ($status == 200) {
+        $data = $response->getBody()
+          ->getContents();
+      }
+      else {
         $this->loggerFactory->get('claude_http')
-          ->warning('httpGet() returned a status '.$status. ' with the response '.$response->getBody()
+          ->warning('httpGet() returned a status ' . $status . ' with the response ' . $response->getBody()
               ->getContents());
       }
-    } catch (RequestException $e) {
+    }
+    catch (RequestException | ConnectException $e) {
       $this->loggerFactory->get('claude_http')
         ->error($e);
     }
-    if ($data) {
-        $return = Json::decode($data);
-    }
-    return $return;
+    return $data;
   }
 
 }

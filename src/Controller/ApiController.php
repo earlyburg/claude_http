@@ -21,7 +21,7 @@ class ApiController extends ControllerBase {
    *
    * @var \Drupal\Core\Database\Connection
    */
-  protected $database;
+  protected Connection $database;
 
   /**
    * The logger factory.
@@ -35,7 +35,7 @@ class ApiController extends ControllerBase {
    *
    * @var \Drupal\claude_http\Service\ConnectorService
    */
-  protected $httpService;
+  protected ConnectorService $httpService;
 
   /**
    * Constructs an ApiController object.

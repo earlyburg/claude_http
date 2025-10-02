@@ -15,14 +15,14 @@ class ApiService {
    *
    * @var \Drupal\Core\Database\Connection
    */
-  protected $database;
+  protected Connection $database;
 
   /**
    * The logger factory.
    *
    * @var \Drupal\Core\Logger\LoggerChannelFactoryInterface
    */
-  protected $loggerFactory;
+  protected LoggerChannelFactoryInterface $loggerFactory;
 
   /**
    * Constructs an ApiService object.
@@ -53,7 +53,7 @@ class ApiService {
 
     foreach ($required_fields as $field) {
       if (empty($data[$field])) {
-        $errors[] = "Missing required field: {$field}";
+        $errors[] = 'Missing required field: '. $field;
       }
     }
 
